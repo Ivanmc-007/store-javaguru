@@ -1,0 +1,32 @@
+server:
+  port: 8100
+spring:
+  application:
+    name: STORE-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: store-authorization
+          uri: lb://STORE-AUTHORIZATION
+          predicates:
+            - Path=/store-authorization/**
+
+        - id: store-product-catalog
+          uri: lb://STORE-PRODUCT-CATALOG
+          predicates:
+            - Path=/store-product-catalog/**
+          filters:
+            - AuthenticationFilter
+
+        - id: store-order
+          uri: lb://STORE-ORDER
+          predicates:
+            - Path=/store-order/**
+          filters:
+            - AuthenticationFilter
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
