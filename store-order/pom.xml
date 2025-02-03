@@ -21,6 +21,7 @@
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
 		<springdoc-openapi-starter-webmvc-ui>2.8.3</springdoc-openapi-starter-webmvc-ui>
+		<io.github.resilience4j.version>2.3.0</io.github.resilience4j.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -32,9 +33,21 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc-openapi-starter-webmvc-ui}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -64,6 +77,16 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 			<version>11.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot3</artifactId>
+			<version>${io.github.resilience4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring6</artifactId>
+			<version>${io.github.resilience4j.version}</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
