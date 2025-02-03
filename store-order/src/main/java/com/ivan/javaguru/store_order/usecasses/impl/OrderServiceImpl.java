@@ -1,6 +1,6 @@
 package com.ivan.javaguru.store_order.usecasses.impl;
 
-import com.ivan.javaguru.store_order.client.ProductCatalogServiceClient;
+import com.ivan.javaguru.store_order.client.StoreProductCatalogFeignClient;
 import com.ivan.javaguru.store_order.exception.ProductNotFoundException;
 import com.ivan.javaguru.store_order.persistence.model.Order;
 import com.ivan.javaguru.store_order.persistence.repository.OrderRepo;
@@ -20,7 +20,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepo;
     private final OrderMapper orderMapper;
-    private final ProductCatalogServiceClient productCatalogServiceClient;
+    private final StoreProductCatalogFeignClient storeProductCatalogFeignClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderResponseDto getProductFromServiceAndConvertToDto(Order order) {
         OrderResponseDto orderDto = orderMapper.toOrderResponseDto(order);
         if (order.getProductId() != null) {
-            Optional<ProductResponseDto> o = productCatalogServiceClient.getProduct(order.getProductId());
+            Optional<ProductResponseDto> o = storeProductCatalogFeignClient.getProduct(order.getProductId());
             if (o.isPresent()) {
                 orderDto.setProductResponseDto(o.get());
                 return orderDto;
