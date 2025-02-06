@@ -1,8 +1,26 @@
 server:
   port: 8100
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: STORE-GATEWAY
+  main:
+    allow-bean-definition-overriding: true
+    security:
+      oauth2:
+        client:
+          registration:
+            keycloak:
+              client-id: ${KEYCLOAK_CLIENT_ID}
+              client-secret: ${KEYCLOAK_CLIENT_SECRET}
+              scope: openid
+              authorization-grant-type: client_credentials
+              token-uri: ${KEYCLOAK_TOKEN_ENDPOINT}
+          provider:
+            keycloak:
+              issuer-uri: ${KEYCLOAK_ISSUER_ENDPOINT}
+
   cloud:
     gateway:
       routes:
@@ -15,15 +33,11 @@ spring:
           uri: lb://STORE-PRODUCT-CATALOG
           predicates:
             - Path=/store-product-catalog/**
-          filters:
-            - AuthenticationFilter
 
         - id: store-order
           uri: lb://STORE-ORDER
           predicates:
             - Path=/store-order/**
-          filters:
-            - AuthenticationFilter
 
 
 eureka:
