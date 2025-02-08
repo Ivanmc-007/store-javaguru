@@ -2,7 +2,7 @@ server:
   port: 8100
 spring:
   config:
-    import: optional:file:.env[.properties]
+    import: optional:configserver:http://localhost:8104
   application:
     name: STORE-GATEWAY
   main:
@@ -43,4 +43,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL}
