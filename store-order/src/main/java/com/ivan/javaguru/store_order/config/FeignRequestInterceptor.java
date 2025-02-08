@@ -1,4 +1,4 @@
-package com.ivan.javaguru.store_order.usecasses;
+package com.ivan.javaguru.store_order.config;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomRequestInterceptor implements RequestInterceptor {
+public class FeignRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
