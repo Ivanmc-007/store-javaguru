@@ -3,13 +3,15 @@
 ## Additional
 
 Папки, которые расположены в корневой папке, а именно:
-**store-discovery, store-gateway, store-order, store-product-catalog** – следует рассматривать как отдельные независимые
-модули.
+**store-discovery, store-config, store-gateway, store-order, store-product-catalog** – следует рассматривать как
+отдельные независимые модули.
 
 ## Modules
 
 * **store-discovery**
     * port: 8761
+* **store-config**
+    * port: 8104
 * **store-gateway**
     * port: 8100
 * **store-order**
