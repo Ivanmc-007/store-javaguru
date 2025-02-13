@@ -1,6 +1,7 @@
 package com.ivan.javaguru.store_order.usecasses.mapper;
 
 import com.ivan.javaguru.store_order.persistence.model.Order;
+import com.ivan.javaguru.store_order.usecasses.dto.OrderCreateDto;
 import com.ivan.javaguru.store_order.usecasses.dto.OrderResponseDto;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
@@ -10,4 +11,6 @@ import org.mapstruct.MappingConstants;
         builder = @Builder(disableBuilder = true))
 public abstract class OrderMapper {
     public abstract OrderResponseDto toOrderResponseDto(Order entity);
+
+    public abstract Order toOrder(OrderCreateDto dto);
 }
