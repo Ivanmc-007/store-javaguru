@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderResponseDto {
-      private Long orderId;
-      private Long userId;
-      private ProductResponseDto productResponseDto;
-      private Integer quantity;
+public class OrderResponseDto implements OrderCreatedEvent {
+    private Long orderId;
+    private Long userId;
+    private ProductResponseDto productResponseDto;
+    private Integer quantity;
 }
