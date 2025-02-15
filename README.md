@@ -3,8 +3,8 @@
 ## Additional
 
 Папки, которые расположены в корневой папке, а именно:
-**store-discovery, store-config, store-gateway, store-order, store-product-catalog** – следует рассматривать как
-отдельные независимые модули.
+**store-discovery, store-config, store-gateway, store-order, store-product-catalog, store-email-notification** – следует
+рассматривать как отдельные независимые модули.
 
 ## Modules
 
@@ -20,6 +20,9 @@
 * **store-product-catalog**
     * context-path: /store-product-catalog
     * port: 8101
+* **store-email-notification**
+    * context-path: /store-email-notification
+    * port: 8105
 
 ### Deprecated
 
@@ -27,7 +30,7 @@
 
 ## Run in Intellij IDEA
 
-1. Откройта папку с проектом в Intellij IDEA
+1. Откройте папку с проектом в Intellij IDEA
 2. Добавьте каждый модуль как Maven проект
 
 Например (модуль **store-discovery**)
