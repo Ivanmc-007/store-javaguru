@@ -12,12 +12,15 @@ import com.ivan.javaguru.store_order.usecasses.dto.OrderResponseDto;
 import com.ivan.javaguru.store_order.usecasses.dto.ProductResponseDto;
 import com.ivan.javaguru.store_order.usecasses.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.ivan.javaguru.store_order.config.TopicName.ORDER_CREATED_EVENT_TOPIC;
 
@@ -61,7 +64,13 @@ public class OrderServiceImpl implements OrderService {
             newOrder = orderRepo.save(newOrder);
             OrderResponseDto responseDto = orderMapper.toOrderResponseDto(newOrder);
             responseDto.setProductResponseDto(o.get());
-            kafkaTemplateOrderCreatedEvent.send(ORDER_CREATED_EVENT_TOPIC, String.valueOf(newOrder.getOrderId()), responseDto);
+            ProducerRecord<String, OrderCreatedEvent> record = new ProducerRecord<>(
+                    ORDER_CREATED_EVENT_TOPIC,
+                    String.valueOf(newOrder.getOrderId()),
+                    responseDto
+            );
+            record.headers().add("messageId", UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8));
+            kafkaTemplateOrderCreatedEvent.send(record);
             return responseDto;
         }
         throw new ProductNotFoundException("Trying to add a non-existent product (productId: %s)".formatted(dto.getProductId()));

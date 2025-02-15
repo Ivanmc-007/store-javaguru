@@ -10,6 +10,8 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,21 +24,19 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.bootstrap-servers}")
     private String producerBootstrapServers;
 
-    @Value("${spring.kafka.producer.key-serializer}")
-    private String producerKeySerializer;
-
-    @Value("${spring.kafka.producer.value-serializer}")
-    private String producerValueSerializer;
-
     @Value("${spring.kafka.producer.acks}")
     private String producerAcks;
+
+    @Value("${spring.kafka.producer.properties.enable.idempotence}")
+    private String producerEnableIdempotence;
 
     Map<String, Object> kafkaProducerConfig() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerKeySerializer);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, producerValueSerializer);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         config.put(ProducerConfig.ACKS_CONFIG, producerAcks);
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, producerEnableIdempotence);
         return config;
     }
 
