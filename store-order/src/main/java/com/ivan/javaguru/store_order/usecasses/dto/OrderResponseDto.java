@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderResponseDto implements OrderCreatedEvent {
+public class OrderResponseDto {
     private Long orderId;
     private Long userId;
     private ProductResponseDto productResponseDto;
