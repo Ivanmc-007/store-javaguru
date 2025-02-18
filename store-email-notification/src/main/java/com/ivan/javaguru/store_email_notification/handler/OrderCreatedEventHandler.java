@@ -3,6 +3,7 @@ package com.ivan.javaguru.store_email_notification.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivan.javaguru.store_email_notification.config.BeanName;
+import com.ivan.javaguru.store_email_notification.config.TopicName;
 import com.ivan.javaguru.store_email_notification.exception.NonRetryableException;
 import com.ivan.javaguru.store_email_notification.persistence.model.OrderCreatedEventUnique;
 import com.ivan.javaguru.store_email_notification.persistence.repository.OrderCreatedEventUniqueRepo;
@@ -29,7 +30,7 @@ public class OrderCreatedEventHandler {
 
     @Transactional(rollbackFor = Exception.class)
     @KafkaListener(
-            topics = "order-created-event-topic",
+            topics = TopicName.ORDER_CREATED_EVENT_TOPIC,
             containerFactory = BeanName.ORDER_CREATED_EVENT_CONTAINER_FACTORY)
     public void handle(@Header("messageId") String messageId,
                        @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) String key,

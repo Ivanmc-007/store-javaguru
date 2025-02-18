@@ -26,6 +26,6 @@ public class OrderCreatedEventUnique {
     @Column(name = "message_id", nullable = false, unique = true)
     private String messageId;
 
-    @Column(name = "order_id", nullable = false, unique = true)
+    @Column(name = "order_id", nullable = false)
     private String orderId;
 }

@@ -7,7 +7,6 @@ import com.ivan.javaguru.store_order.persistence.model.Order;
 import com.ivan.javaguru.store_order.persistence.repository.OrderRepo;
 import com.ivan.javaguru.store_order.usecasses.OrderService;
 import com.ivan.javaguru.store_order.usecasses.dto.OrderCreateDto;
-import com.ivan.javaguru.store_order.usecasses.dto.OrderCreatedEvent;
 import com.ivan.javaguru.store_order.usecasses.dto.OrderResponseDto;
 import com.ivan.javaguru.store_order.usecasses.dto.ProductResponseDto;
 import com.ivan.javaguru.store_order.usecasses.mapper.OrderMapper;
@@ -32,8 +31,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final StoreProductCatalogFeignClient storeProductCatalogFeignClient;
 
-    @Qualifier(BeanName.KAFKA_TEMPLATE_ORDER_CREATED_EVENT)
-    private final KafkaTemplate<String, OrderCreatedEvent> kafkaTemplateOrderCreatedEvent;
+    @Qualifier(BeanName.KAFKA_TEMPLATE)
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     @Transactional(readOnly = true)
@@ -56,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(transactionManager = BeanName.TRANSACTION_MANAGER, rollbackFor = Exception.class)
     public OrderResponseDto save(OrderCreateDto dto) {
         Order newOrder = orderMapper.toOrder(dto);
         Optional<ProductResponseDto> o = storeProductCatalogFeignClient.getProduct(dto.getProductId());
@@ -64,13 +63,13 @@ public class OrderServiceImpl implements OrderService {
             newOrder = orderRepo.save(newOrder);
             OrderResponseDto responseDto = orderMapper.toOrderResponseDto(newOrder);
             responseDto.setProductResponseDto(o.get());
-            ProducerRecord<String, OrderCreatedEvent> record = new ProducerRecord<>(
+            ProducerRecord<String, Object> record = new ProducerRecord<>(
                     ORDER_CREATED_EVENT_TOPIC,
                     String.valueOf(newOrder.getOrderId()),
                     responseDto
             );
             record.headers().add("messageId", UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8));
-            kafkaTemplateOrderCreatedEvent.send(record);
+            kafkaTemplate.send(record);
             return responseDto;
         }
         throw new ProductNotFoundException("Trying to add a non-existent product (productId: %s)".formatted(dto.getProductId()));
